@@ -5,6 +5,6 @@ for table_num in range(1, 11):
         
     for multiplier in range(0, 11):
         result = table_num * multiplier
-        print(f"{result}", end="  ")
+        print(f"{result}", end=" ")
         
     print("")
