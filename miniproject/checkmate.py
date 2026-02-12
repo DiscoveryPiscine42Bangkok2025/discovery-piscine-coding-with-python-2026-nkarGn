@@ -1,35 +1,34 @@
 def checkmate(board):
-    
 
     row = 0
     column = 0
-    for i in board:
+    for i in board: 
         if i != '\n':
-            column += 1
+            column += 1 
         else:
             break
-    row = len(board.splitlines())
-    board_no_newline = board.replace('\n', '')
-    new_board = []
+    row = len(board.splitlines()) 
+    board_no_newline = board.replace('\n', '') 
+    new_board = [] 
 
     if row != column:
-        print("Error: the board is not square")
+        print("Error: the board is not square") 
         return
     if board.count('K') != 1:
-        print("Error: there must be exactly one King on the board")
+        print("Error: there must be exactly one King on the board") 
         return
     for i in range(row):
-        new_board.append([])
-        for j in range(column):
-            new_board[i].append(board_no_newline[i * column + j])
-    rook_positions = (0, 0)
+        new_board.append([]) 
+        for j in range(column): 
+            new_board[i].append(board_no_newline[i * column + j]) 
+    rook_positions = (0, 0) 
     queen_positions = (0, 0)
     pawn_positions = (0, 0)
     king_positions = (0, 0)
     bishop_positions = (0, 0)
     for i in range(row):
-        for j in range(column):
-            if new_board[i][j] == 'R':
+        for j in range(column): 
+            if new_board[i][j] == 'R': 
                 rook_positions = (i, j)
                 new_board = rook_rewrite(new_board, rook_positions[0] , rook_positions[1])
             if new_board[i][j] == 'Q':
@@ -49,9 +48,9 @@ def checkmate(board):
     
 
     #for row in new_board:
-     #   print(row)
+    #   print(row)
 
-    if check_king(new_board):
+    if check_king(new_board): 
         print("Success")
     else:  
         print("Fail")
@@ -61,16 +60,40 @@ def checkmate(board):
 
 
 def rook_rewrite(new_board, rook_r, rook_c): 
-    board_rows = len(new_board)     
+    board_rows = len(new_board)    
     board_cols = len(new_board[0])   
 
     for i in range(board_rows): 
         for j in range(board_cols):
             if i == rook_r or j == rook_c: 
-                if not (i == rook_r and j == rook_c): 
-                    new_board[i][j] = 'X'
+                if not (i == rook_r and j == rook_c):  
+                    new_board[i][j] = 'X' if new_board[i][j] not in ['R', 'Q', 'P', 'B'] else new_board[i][j]
+    return new_board 
+
+
+
+def pawn_rewrite(new_board, pawn_r, pawn_c): 
+    board_rows = len(new_board)     
+    board_cols = len(new_board[0])   
+
+    attack_positions = [(pawn_r - 1, pawn_c - 1), (pawn_r - 1, pawn_c + 1)] 
+
+    for pos in attack_positions: 
+        r, c = pos 
+        if 0 <= r < board_rows and 0 <= c < board_cols: 
+            new_board[r][c] = 'X' if new_board[r][c] not in ['R', 'Q', 'P', 'B'] else new_board[r][c]
     return new_board
 
+def bishop_rewrite(new_board, bishop_r, bishop_c): 
+    board_rows = len(new_board)     
+    board_cols = len(new_board[0])   
+
+    for i in range(board_rows): 
+        for j in range(board_cols):
+            if abs(bishop_r - i) == abs(bishop_c - j): 
+                if not (i == bishop_r and j == bishop_c): 
+                    new_board[i][j] = 'X' if new_board[i][j] not in ['R', 'Q', 'P', 'B'] else new_board[i][j]
+    return new_board
 
 def queen_rewrite(new_board, queen_r, queen_c): 
     board_rows = len(new_board)     
@@ -80,38 +103,11 @@ def queen_rewrite(new_board, queen_r, queen_c):
         for j in range(board_cols):
             if i == queen_r or j == queen_c or abs(queen_r - i) == abs(queen_c - j): 
                 if not (i == queen_r and j == queen_c): 
-                    new_board[i][j] = 'X' 
+                    new_board[i][j] = 'X' if new_board[i][j] not in ['R', 'Q', 'P', 'B'] else new_board[i][j]
     return new_board
-
-def pawn_rewrite(new_board, pawn_r, pawn_c): 
-    board_rows = len(new_board)     
-    board_cols = len(new_board[0])   
-
-    attack_positions = [(pawn_r - 1, pawn_c - 1), (pawn_r - 1, pawn_c + 1)] 
-
-    for pos in attack_positions:
-        r, c = pos
-        if 0 <= r < board_rows and 0 <= c < board_cols:
-            new_board[r][c] = 'X' 
-    return new_board
-
-def bishop_rewrite(new_board, bishop_r, bishop_c): 
-    board_rows = len(new_board)     
-    board_cols = len(new_board[0])   
-
-    directions = [(-1, -1), (-1, 1), (1, -1), (1, 1)] 
-
-    for direction in directions:
-        dr, dc = direction
-        r, c = bishop_r + dr, bishop_c + dc
-        while 0 <= r < board_rows and 0 <= c < board_cols:
-            new_board[r][c] = 'X' 
-            r += dr
-            c += dc
-    return new_board  
 
 def check_king(new_board):
-    for i in new_board:
+    for i in new_board: 
         for j in i:
             if j == 'K':
                 return False
