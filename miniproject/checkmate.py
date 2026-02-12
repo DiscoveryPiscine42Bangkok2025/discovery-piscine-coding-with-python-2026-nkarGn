@@ -11,7 +11,6 @@ def checkmate(board):
     row = len(board.splitlines())
     board_no_newline = board.replace('\n', '')
     new_board = []
-    print(f"columns: {column} , rows: {row}")
 
     if row != column:
         print("Error: the board is not square")
@@ -27,6 +26,7 @@ def checkmate(board):
     queen_positions = (0, 0)
     pawn_positions = (0, 0)
     king_positions = (0, 0)
+    bishop_positions = (0, 0)
     for i in range(row):
         for j in range(column):
             if new_board[i][j] == 'R':
@@ -40,14 +40,16 @@ def checkmate(board):
                 new_board = pawn_rewrite(new_board, pawn_positions[0] , pawn_positions[1])
             if new_board[i][j] == 'K':
                 king_positions = (i, j)
+            if new_board[i][j] == 'B':
+                bishop_positions = (i, j)
+                new_board = bishop_rewrite(new_board, bishop_positions[0] , bishop_positions[1])
                 
 
 
     
-    print("Rook positions:", rook_positions)
-    print("New board after rook rewrite:")
-    for row in new_board:
-        print(row)
+
+    #for row in new_board:
+     #   print(row)
 
     if check_king(new_board):
         print("Success")
@@ -67,7 +69,6 @@ def rook_rewrite(new_board, rook_r, rook_c):
             if i == rook_r or j == rook_c: 
                 if not (i == rook_r and j == rook_c): 
                     new_board[i][j] = 'X'
-                    print(f"Rook can attack position: ({i}, {j})")
     return new_board
 
 
@@ -80,7 +81,6 @@ def queen_rewrite(new_board, queen_r, queen_c):
             if i == queen_r or j == queen_c or abs(queen_r - i) == abs(queen_c - j): 
                 if not (i == queen_r and j == queen_c): 
                     new_board[i][j] = 'X' 
-                    print(f"Queen can attack position: ({i}, {j})")
     return new_board
 
 def pawn_rewrite(new_board, pawn_r, pawn_c): 
@@ -93,7 +93,6 @@ def pawn_rewrite(new_board, pawn_r, pawn_c):
         r, c = pos
         if 0 <= r < board_rows and 0 <= c < board_cols:
             new_board[r][c] = 'X' 
-            print(f"Pawn can attack position: ({r}, {c})")
     return new_board
 
 def bishop_rewrite(new_board, bishop_r, bishop_c): 
@@ -107,7 +106,6 @@ def bishop_rewrite(new_board, bishop_r, bishop_c):
         r, c = bishop_r + dr, bishop_c + dc
         while 0 <= r < board_rows and 0 <= c < board_cols:
             new_board[r][c] = 'X' 
-            print(f"Bishop can attack position: ({r}, {c})")
             r += dr
             c += dc
     return new_board  
