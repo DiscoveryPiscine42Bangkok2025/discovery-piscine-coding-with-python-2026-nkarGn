@@ -31,16 +31,19 @@ def checkmate(board):
         for j in range(column):
             if new_board[i][j] == 'R':
                 rook_positions = (i, j)
+                new_board = rook_rewrite(new_board, rook_positions[0] , rook_positions[1])
             if new_board[i][j] == 'Q':
                 queen_positions = (i, j)
+                new_board = queen_rewrite(new_board, queen_positions[0] , queen_positions[1])
             if new_board[i][j] == 'P':
                 pawn_positions = (i, j)
+                new_board = pawn_rewrite(new_board, pawn_positions[0] , pawn_positions[1])
             if new_board[i][j] == 'K':
                 king_positions = (i, j)
+                
 
-    new_board = rook_rewrite(new_board, rook_positions[0] , rook_positions[1])
-    new_board = queen_rewrite(new_board, queen_positions[0] , queen_positions[1])
-    new_board = pawn_rewrite(new_board, pawn_positions[0] , pawn_positions[1])
+
+    
     print("Rook positions:", rook_positions)
     print("New board after rook rewrite:")
     for row in new_board:
@@ -92,6 +95,22 @@ def pawn_rewrite(new_board, pawn_r, pawn_c):
             new_board[r][c] = 'X' 
             print(f"Pawn can attack position: ({r}, {c})")
     return new_board
+
+def bishop_rewrite(new_board, bishop_r, bishop_c): 
+    board_rows = len(new_board)     
+    board_cols = len(new_board[0])   
+
+    directions = [(-1, -1), (-1, 1), (1, -1), (1, 1)] 
+
+    for direction in directions:
+        dr, dc = direction
+        r, c = bishop_r + dr, bishop_c + dc
+        while 0 <= r < board_rows and 0 <= c < board_cols:
+            new_board[r][c] = 'X' 
+            print(f"Bishop can attack position: ({r}, {c})")
+            r += dr
+            c += dc
+    return new_board  
 
 def check_king(new_board):
     for i in new_board:
