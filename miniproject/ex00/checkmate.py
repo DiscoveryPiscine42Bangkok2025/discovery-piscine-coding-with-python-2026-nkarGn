@@ -25,11 +25,7 @@ def checkmate(board):
     if row != column:
         print(f"Error: not a square board ({row} rows, {column} columns)")
         return
-
-
-    print(lines)
         
-
     
     board_no_newline = board.replace('\n', '') 
     new_board = [] 
