@@ -1,13 +1,36 @@
 def checkmate(board):
 
-    row = 0
-    column = 0
-    for i in board: 
-        if i != '\n':
-            column += 1 
-        else:
-            break
     row = len(board.splitlines()) 
+    column = 0
+   
+
+    lines = board.splitlines()
+    
+    if not lines:
+        print("Error: empty board")
+        return
+    
+    row = len(lines)
+    
+    lengths = []
+    for line in lines:
+        lengths.append(len(line))
+    
+    if len(set(lengths)) != 1:
+        print("Error: the board is not square (rows have different number of pieces/columns)")
+        return
+    
+    column = lengths[0]  
+    
+    if row != column:
+        print(f"Error: not a square board ({row} rows, {column} columns)")
+        return
+
+
+    print(lines)
+        
+
+    
     board_no_newline = board.replace('\n', '') 
     new_board = [] 
 
